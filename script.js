@@ -1,88 +1,46 @@
-const API_KEY = 'ad96c3a2f9b5ae0694677a3d65f4ce00'; // Replace with your TMDB key
-const BASE_URL = 'https://api.themoviedb.org/3';
-
-const searchInput = document.getElementById('search-input');
-const searchResults = document.getElementById('search-results');
-const watchedList = document.getElementById('watched-list');
-const recommendationsContainer = document.getElementById('recommendations');
-const getRecommendationsButton = document.getElementById('get-recommendations');
-
-let watchedShows = [];
-
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.trim();
-  if (query.length < 2) return;
-  searchTVShows(query);
-});
-
-getRecommendationsButton.addEventListener('click', () => {
-  getRecommendations();
-});
-
-// 🔍 Search for TV shows
-async function searchTVShows(query) {
+async function getData(query) {
+  const url = "https://api.themoviedb.org/3/search/movie?query=" + query.replaceAll(" ","+");
   try {
-    const res = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    displaySearchResults(data.results);
-  } catch (error) {
-    console.error('Search error:', error);
-  }
-}
-
-// 📄 Display search results
-function displaySearchResults(shows) {
-  searchResults.innerHTML = '';
-  shows.forEach(show => {
-    const showCard = document.createElement('div');
-    showCard.className = 'show-card';
-    showCard.innerHTML = `
-      <h3>${show.name}</h3>
-      <p>${show.first_air_date?.slice(0, 4) || 'N/A'}</p>
-      <button data-show='${JSON.stringify(show)}'>Add</button>
-    `;
-    showCard.querySelector('button').addEventListener('click', () => addToWatched(show));
-    searchResults.appendChild(showCard);
-  });
-}
-
-// ➕ Add show to watched list
-function addToWatched(show) {
-  if (watchedShows.find(s => s.id === show.id)) return; // Prevent duplicates
-  watchedShows.push(show);
-
-  const card = document.createElement('div');
-  card.className = 'show-card';
-  card.innerHTML = `<h3>${show.name}</h3><p>Added</p>`;
-  watchedList.appendChild(card);
-}
-
-// 💡 Get recommendations based on watched shows
-async function getRecommendations() {
-  recommendationsContainer.innerHTML = '';
-
-  const recommended = new Map(); // Avoid duplicates
-  for (const show of watchedShows) {
-    try {
-      const res = await fetch(`${BASE_URL}/tv/${show.id}/recommendations?api_key=${API_KEY}`);
-      const data = await res.json();
-      data.results.forEach(rec => {
-        if (!recommended.has(rec.id)) {
-          recommended.set(rec.id, rec);
-        }
-      });
-    } catch (err) {
-      console.error(`Failed to get recommendations for ${show.name}`, err);
+    const response = await fetch(url, {
+      headers: {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDk2YzNhMmY5YjVhZTA2OTQ2NzdhM2Q2NWY0Y2UwMCIsIm5iZiI6MTc0Nzc3ODQ2OC44NjMwMDAyLCJzdWIiOiI2ODJjZmJhNGQ1YjIxZjYzNjg2NDk3NWQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.O9QraJ6bvIda9ouICAyq434tDUpybtw6yHf2lpRfa8g"
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
     }
-  }
 
-  recommended.forEach(show => {
-    const card = document.createElement('div');
-    card.className = 'show-card';
-    card.innerHTML = `
-      <h3>${show.name}</h3>
-      <p>${show.first_air_date?.slice(0, 4) || 'N/A'}</p>
-    `;
-    recommendationsContainer.appendChild(card);
-  });
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error.message);
+    return;
+  }
 }
+
+const searchInput = document.getElementById("search-input");
+const searchList = document.getElementById("search-results");
+const recommendationButton = document.getElementById("get-recommendations");
+
+const watchedMovies = [];
+
+recommendationButton.addEventListener("click", async function(event){
+});
+
+searchInput.addEventListener("input", async function(event){
+  const movieData = await getData(searchInput.value);
+  console.log(movieData);
+  searchList.innerHTML = "";
+  for (const result of movieData.results){
+    const resultEl = document.createElement("div");
+    resultEl.id = result.title;
+    resultEl.textContent = result.title + ": " + result["genre_ids"].join(",");
+    const resultImgEl = document.createElement("img");
+    resultImgEl.src = "https://image.tmdb.org/t/p/w500/" + result["backdrop_path"]
+    const resultButton = document.createElement("button");
+    resultButton.appendChild(resultImgEl);
+    resultEl.appendChild(resultButton);
+    searchList.appendChild(resultEl);
+  }
+  // searchList.textContent = movieData.results.map(result => result.title);
+});
