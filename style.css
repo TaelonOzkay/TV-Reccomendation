@@ -1,0 +1,101 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #2c3e50;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+section {
+  margin: 3rem auto;
+  max-width: 1000px;
+  padding: 0 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #34495e;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.show-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.show-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  transition: transform 0.2s ease;
+}
+
+.show-card:hover {
+  transform: translateY(-5px);
+}
+
+.show-card img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.show-card h3 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0.3rem;
+  color: #2c3e50;
+}
+
+.show-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
