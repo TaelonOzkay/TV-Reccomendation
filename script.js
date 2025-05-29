@@ -36,7 +36,7 @@ searchInput.addEventListener("input", async function(event){
     resultEl.id = result.title;
     resultEl.textContent = result.title + ": " + result["genre_ids"].join(",");
     const resultImgEl = document.createElement("img");
-    resultImgEl.src = "https://image.tmdb.org/t/p/w500/" + result["backdrop_path"]
+    resultImgEl.src = "https://image.tmdb.org/t/p/w500/" + result["poster_path"]
     const resultButton = document.createElement("button");
     resultButton.appendChild(resultImgEl);
     resultEl.appendChild(resultButton);
