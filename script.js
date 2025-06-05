@@ -19,7 +19,6 @@ getRecommendationsButton.addEventListener('click', () => {
   getRecommendations();
 });
 
-// 🔍 Search for TV shows
 async function searchTVShows(query) {
   try {
     const res = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
@@ -30,7 +29,6 @@ async function searchTVShows(query) {
   }
 }
 
-// 📄 Display search results
 function displaySearchResults(shows) {
   searchResults.innerHTML = '';
   shows.forEach(show => {
@@ -46,9 +44,8 @@ function displaySearchResults(shows) {
   });
 }
 
-// ➕ Add show to watched list
 function addToWatched(show) {
-  if (watchedShows.find(s => s.id === show.id)) return; // Prevent duplicates
+  if (watchedShows.find(s => s.id === show.id)) return;
   watchedShows.push(show);
 
   const card = document.createElement('div');
@@ -57,11 +54,10 @@ function addToWatched(show) {
   watchedList.appendChild(card);
 }
 
-// 💡 Get recommendations based on watched shows
 async function getRecommendations() {
   recommendationsContainer.innerHTML = '';
 
-  const recommended = new Map(); // Avoid duplicates
+  const recommended = new Map();
   for (const show of watchedShows) {
     try {
       const res = await fetch(`${BASE_URL}/tv/${show.id}/recommendations?api_key=${API_KEY}`);
