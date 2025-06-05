@@ -64,7 +64,10 @@ async function getRecommendations() {
       const data = await res.json();
       data.results.forEach(rec => {
         if (!recommended.has(rec.id)) {
+          rec.recommendations = 1;
           recommended.set(rec.id, rec);
+        } else {
+          recommended.get(rec.id).recommendations += 1;
         }
       });
     } catch (err) {
@@ -72,13 +75,26 @@ async function getRecommendations() {
     }
   }
 
-  recommended.forEach(show => {
+  recommended.values().toArray()
+    .toSorted( (a,b) => b.recommendations - a.recommendations)
+    .forEach(show => {
     const card = document.createElement('div');
     card.className = 'show-card';
+    var recommendationString = "";
+    if (show.recommendations == 1){
+      recommendationString = "Somewhat Reccomended"
+    } if (show.recommendations == 2){
+      recommendationString = "Reccomended"
+    } if (show.recommendations == 3){
+      recommendationString = "Highly Reccomended"
+    }
     card.innerHTML = `
       <h3>${show.name}</h3>
       <p>${show.first_air_date?.slice(0, 4) || 'N/A'}</p>
+      <p>${recommendationString}</p>
     `;
     recommendationsContainer.appendChild(card);
   });
 }
+
+// Final D3
